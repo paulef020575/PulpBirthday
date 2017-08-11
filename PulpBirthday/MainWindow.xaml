@@ -5,8 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PulpBirthday"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        DataContext="{DynamicResource AppData}"
+        Title="{Binding Name}" Height="350" Width="525">
     <Grid>
-        
+        <Grid.Resources>
+            <DataTemplate x:Key="PersonList">
+                <ListBox ItemsSource="{Binding PersonList}" />
+            </DataTemplate>
+            <DataTemplate x:Key="Person">
+                <TextBlock Text="{Binding Birthday}" />
+            </DataTemplate>
+
+            <local:MainDataTemplateSelector x:Key="TemplateSelector" ListTemplate="{StaticResource PersonList}" ItemTemplate="{StaticResource Person}" />
+        </Grid.Resources>
+
+        <ContentPresenter ContentTemplateSelector="{StaticResource TemplateSelector}" Content="{Binding CurrentItem}"/>
     </Grid>
 </Window>

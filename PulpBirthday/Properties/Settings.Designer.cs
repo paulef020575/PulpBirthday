@@ -37,7 +37,7 @@ namespace PulpBirthday.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("e:\\firebird\\producting.fdb")]
+        [global::System.Configuration.DefaultSettingValueAttribute("e:\\firebird\\omts.fdb")]
         public string Database {
             get {
                 return ((string)(this["Database"]));

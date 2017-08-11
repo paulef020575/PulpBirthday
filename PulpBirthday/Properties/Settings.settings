@@ -6,7 +6,7 @@
       <Value Profile="(Default)">172.17.0.30</Value>
     </Setting>
     <Setting Name="Database" Type="System.String" Scope="User">
-      <Value Profile="(Default)">e:\firebird\producting.fdb</Value>
+      <Value Profile="(Default)">e:\firebird\omts.fdb</Value>
     </Setting>
     <Setting Name="User" Type="System.String" Scope="User">
       <Value Profile="(Default)">initial</Value>

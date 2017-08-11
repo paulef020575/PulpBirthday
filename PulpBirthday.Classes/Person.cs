@@ -7,11 +7,9 @@ using System.Threading.Tasks;
 
 namespace PulpBirthday.Classes
 {
-    public class Person
+    public class Person : DataItem
     {
         #region Свойства
-
-        public int Id { get; private set; }
 
         public string Lastname { get; set; }
 
@@ -34,20 +32,22 @@ namespace PulpBirthday.Classes
         #region Конструкторы
 
         public Person()
+            : base()
         {
         }
 
         public Person(FbDataReader reader)
+            : base(reader)
         {
             Id = (int)reader["id"];
             Lastname = (string)reader["lastname"];
             Firstname = (string)reader["firstname"];
             Secondname = (string)reader["secondname"];
             Birthday = (DateTime)reader["birthday"];
-            Female = (bool)reader["sex"];
+            Female = ((short)reader["female"] > 0);
             Email = (string)reader["email"];
-            IsInList = (bool)reader["isInList"];
-            IsSending = (bool)reader["isSending"];
+            IsInList = ((short)reader["isInList"] > 0);
+            IsSending = ((short)reader["isSending"] > 0);
         }
 
         #endregion

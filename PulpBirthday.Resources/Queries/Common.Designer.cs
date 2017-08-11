@@ -61,7 +61,7 @@ namespace PulpBirthday.Resources.Queries {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на select * from getConnectionString().
+        ///   Ищет локализованную строку, похожую на select * from getConnectionString.
         /// </summary>
         public static string GetConnectionString {
             get {

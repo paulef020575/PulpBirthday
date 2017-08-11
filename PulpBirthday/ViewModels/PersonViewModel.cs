@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace PulpBirthday
 {
@@ -27,6 +28,7 @@ namespace PulpBirthday
                 {
                     person.Lastname = value;
                     NotifyPropertyChanged("Lastname");
+                    NotifyPropertyChanged("Fullname");
                 }
             }
         }
@@ -40,6 +42,7 @@ namespace PulpBirthday
                 {
                     person.Lastname = value;
                     NotifyPropertyChanged("Firstname");
+                    NotifyPropertyChanged("Fullname");
                 }
             }
         }
@@ -53,6 +56,7 @@ namespace PulpBirthday
                 {
                     person.Secondname = value;
                     NotifyPropertyChanged("Secondname");
+                    NotifyPropertyChanged("Fullname");
                 }
             }
         }
@@ -137,6 +141,47 @@ namespace PulpBirthday
             }
         }
 
+
+        public string Fullname
+        {
+            get
+            {
+                StringBuilder result = new StringBuilder(Lastname);
+
+                if (Firstname.Length > 0)
+                {
+                    result.Append(" " + Firstname);
+
+                    if (Secondname.Length > 0)
+                    {
+                        result.Append(" " + Secondname);
+                    }
+                }
+
+                return result.ToString();
+            }
+        }
+
+        public string Shortname
+        {
+            get
+            {
+                StringBuilder result = new StringBuilder(Lastname);
+
+                if (Firstname.Length > 0)
+                {
+                    result.Append(" " + Firstname.Substring(0, 1) + ".");
+
+                    if (Secondname.Length > 0)
+                    {
+                        result.Append(" " + Secondname.Substring(0, 1) + ".");
+                    }
+                }
+
+                return result.ToString();
+            }
+        }
+
         #endregion
 
         #region Конструкторы
@@ -157,9 +202,37 @@ namespace PulpBirthday
 
         #region Методы
 
+        public static ObservableCollection<PersonViewModel> LoadList(BdDatabase database,
+                    DateTime dateFrom, DateTime dateTo, bool isForList)
+        {
+            ObservableCollection<PersonViewModel> list = new ObservableCollection<PersonViewModel>();
+
+            List<Person> personList = Person.LoadList(database, dateFrom, dateTo, isForList);
+
+            foreach (Person person in personList)
+            {
+                list.Add(new PersonViewModel(person));
+            }
+
+            return list;
+        }
+
+        public static ObservableCollection<PersonViewModel> LoadList(BdDatabase database)
+        {
+            DateTime Jan1 = new DateTime(2017, 1, 1), Dec31 = new DateTime(2017, 12, 31);
+
+            return LoadList(database, Jan1, Dec31, false);
+        }
+
+
+        public override string ToString()
+        {
+            return Shortname;
+        }
+
         #endregion
 
-        #region Командыё
+        #region Команды
 
         #endregion
     }
