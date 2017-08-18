@@ -1,0 +1,39 @@
+﻿<UserControl x:Class="PulpBirthday.PrintListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PulpBirthday"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="379.083">
+    <DockPanel>
+
+        <StackPanel DockPanel.Dock="Left" Orientation="Vertical" HorizontalAlignment="Center">
+            <StackPanel Orientation="Horizontal">
+                <Button Content="{iconPacks:PackIconMaterial MenuLeft}" Command="{Binding PreviousMonth}" Margin="5 5 0 5"/>
+                <TextBlock Text="{Binding DateFrom, StringFormat=MMMM, ConverterCulture=ru-RU}" 
+                           Margin="5" MinWidth="100" TextAlignment="Center"/>
+                <Button Content="{iconPacks:PackIconMaterial MenuRight}" Command="{Binding NextMonth}" Margin="0 5 5 5"/>
+            </StackPanel>
+            
+            <Button Command="{Binding Print}" Height="Auto" Margin="5" Grid.Column="1" 
+                    Width="{Binding Width, ElementName=BackButton, Mode=OneWay}">
+                <StackPanel Orientation="Vertical">
+                    <ContentControl Content="{iconPacks:PackIconMaterial Printer}" Margin="5 5 0 5" HorizontalAlignment="Center"/>
+                    <TextBlock Text="печать" Margin="5" />
+                </StackPanel>
+            </Button>
+
+            <Button Command="{Binding Close}" Height="Auto" Margin="5" Grid.Column="0" Name="BackButton" Width="Auto">
+                <StackPanel Orientation="Vertical">
+                    <ContentControl Content="{iconPacks:PackIconMaterial AccountMultiple}" Margin="5 5 0 5" HorizontalAlignment="Center" />
+                    <TextBlock Text="к общему списку" Margin="5" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+        <FlowDocumentPageViewer Document="{Binding Document}">
+        </FlowDocumentPageViewer>
+    </DockPanel>
+</UserControl>

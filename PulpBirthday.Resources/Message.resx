@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ConfirmClose" xml:space="preserve">
+    <value>Закрыть окно без сохранения?</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>Удалить выбранные данные?</value>
+  </data>
   <data name="IdentifierNotFoundError" xml:space="preserve">
     <value>Не найдена строка с указанным идентификатором</value>
   </data>

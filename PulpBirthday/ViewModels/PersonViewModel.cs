@@ -5,12 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using PulpBirthday.Properties;
 
 namespace PulpBirthday
 {
     public class PersonViewModel : ViewModel
     {
         private Person person;
+
+        private BdDatabase database;
 
         #region Свойства
 
@@ -40,7 +43,7 @@ namespace PulpBirthday
             {
                 if (!string.Equals(person.Firstname, value, StringComparison.CurrentCulture))
                 {
-                    person.Lastname = value;
+                    person.Firstname = value;
                     NotifyPropertyChanged("Firstname");
                     NotifyPropertyChanged("Fullname");
                 }
@@ -188,6 +191,9 @@ namespace PulpBirthday
 
         public PersonViewModel(Person _person)
         {
+            database = BdDatabase.Connect(Settings.Default.Server, Settings.Default.Database,
+                                            Settings.Default.User, Settings.Default.Password);
+
             person = _person;
 
             ClearModified();
@@ -202,12 +208,23 @@ namespace PulpBirthday
 
         #region Методы
 
+        internal PersonViewModel Copy()
+        {
+            return new PulpBirthday.PersonViewModel(Person.Load(database, person.Id));
+        }
+
+        internal void Delete()
+        {
+            person.Delete(database);
+        }
+
+
         public static ObservableCollection<PersonViewModel> LoadList(BdDatabase database,
-                    DateTime dateFrom, DateTime dateTo, bool isForList)
+                    DateTime dateFrom, DateTime dateTo, bool isForList, int sortingOrder, string mask)
         {
             ObservableCollection<PersonViewModel> list = new ObservableCollection<PersonViewModel>();
 
-            List<Person> personList = Person.LoadList(database, dateFrom, dateTo, isForList);
+            List<Person> personList = Person.LoadList(database, dateFrom, dateTo, isForList, sortingOrder, mask);
 
             foreach (Person person in personList)
             {
@@ -217,11 +234,11 @@ namespace PulpBirthday
             return list;
         }
 
-        public static ObservableCollection<PersonViewModel> LoadList(BdDatabase database)
+        public static ObservableCollection<PersonViewModel> LoadList(BdDatabase database, int sortingOrder, string mask)
         {
             DateTime Jan1 = new DateTime(2017, 1, 1), Dec31 = new DateTime(2017, 12, 31);
 
-            return LoadList(database, Jan1, Dec31, false);
+            return LoadList(database, Jan1, Dec31, false, sortingOrder, mask);
         }
 
 
@@ -230,9 +247,71 @@ namespace PulpBirthday
             return Shortname;
         }
 
+        private void SaveItem()
+        {
+            person.Save(database);
+            OnEndEditing();
+        }
+
+        private void CloseItem()
+        {
+            string message = PulpBirthday.Resources.Message.ConfirmClose;
+            if (!IsModified
+                || System.Windows.MessageBox.Show(message, "",
+                                                    System.Windows.MessageBoxButton.YesNo) == System.Windows.MessageBoxResult.Yes)
+                OnEndEditing();
+        }
+
+        public override bool Equals(object obj)
+        {
+            PersonViewModel vm = obj as PersonViewModel;
+            if (vm != null)
+                return person.Equals(vm.person);
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return person.GetHashCode();
+        }
+
         #endregion
 
         #region Команды
+
+        #region Save
+
+        private RelayCommand saveCommand;
+
+        public RelayCommand Save
+        {
+            get
+            {
+                if (saveCommand == null)
+                    saveCommand = new RelayCommand(param => SaveItem(), param => IsModified);
+
+                return saveCommand;
+            }
+        }
+
+        #endregion
+
+        #region Close
+
+        private RelayCommand closeCommand;
+
+        public RelayCommand Close
+        {
+            get
+            {
+                if (closeCommand == null)
+                    closeCommand = new RelayCommand(param => CloseItem());
+
+                return closeCommand;
+            }
+        }
+
+        #endregion
 
         #endregion
     }

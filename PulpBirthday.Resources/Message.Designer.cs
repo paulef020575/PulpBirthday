@@ -61,6 +61,24 @@ namespace PulpBirthday.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Закрыть окно без сохранения?.
+        /// </summary>
+        public static string ConfirmClose {
+            get {
+                return ResourceManager.GetString("ConfirmClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Удалить выбранные данные?.
+        /// </summary>
+        public static string ConfirmDelete {
+            get {
+                return ResourceManager.GetString("ConfirmDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Не найдена строка с указанным идентификатором.
         /// </summary>
         public static string IdentifierNotFoundError {

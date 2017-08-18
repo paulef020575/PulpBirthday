@@ -61,6 +61,15 @@ namespace PulpBirthday.Resources.Queries {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на delete from refPerson where id = @id.
+        /// </summary>
+        public static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на select id from refPersonInsert(@lastname, @firstname, @secondname, @female, @birthday, @email, @isInList, @isSending).
         /// </summary>
         public static string Insert {
@@ -79,11 +88,29 @@ namespace PulpBirthday.Resources.Queries {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на select * from refPersonLoadList(@dateFrom, @dateTo, @isList) order by birthday, lastname, firstname, secondname.
+        ///   Ищет локализованную строку, похожую на select * from refPersonLoadList(@dateFrom, @dateTo, @isList, @mask) order by extract(month from birthday), extract(day from birthday).
         /// </summary>
-        public static string LoadList {
+        public static string LoadListSortedByBirthday {
             get {
-                return ResourceManager.GetString("LoadList", resourceCulture);
+                return ResourceManager.GetString("LoadListSortedByBirthday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на select * from refPersonLoadList(@dateFrom, @dateTo, @isList, @mask) order by lastname, firstname, secondname.
+        /// </summary>
+        public static string LoadListSortedByName {
+            get {
+                return ResourceManager.GetString("LoadListSortedByName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на update refPerson set lastname = @lastname, firstname = @firstname, secondname = @secondname, female = @female, birthday = @birthday, email = @email, isInList = @isInList, isSending = @isSending where id = @id.
+        /// </summary>
+        public static string Update {
+            get {
+                return ResourceManager.GetString("Update", resourceCulture);
             }
         }
     }

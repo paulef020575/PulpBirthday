@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="PulpBirthday.PersonListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PulpBirthday"
+             xmlns:iconPack="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="500">
+    <DockPanel>
+        <Grid DockPanel.Dock="Top" Height="Auto">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition MinWidth="150" MaxWidth="200" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Сортировка" Margin="5" Grid.Column="0" VerticalAlignment="Center"/>
+            <ComboBox SelectedIndex="{Binding SortingOrder}" Margin="5" Grid.Column="1">
+                <ComboBoxItem>по имени</ComboBoxItem>
+                <ComboBoxItem>по дате рождения</ComboBoxItem>
+            </ComboBox>
+            <ContentControl Grid.Column="3" Content="{iconPack:PackIconMaterial Magnify}" Margin="5 5 0 5" VerticalAlignment="Center" />
+            <TextBox Text="{Binding SearchedText, UpdateSourceTrigger=PropertyChanged}" 
+                     Margin="0 5 0 5" Grid.Column="4" HorizontalAlignment="Stretch"  />
+            <Button Grid.Column="5" Content="{iconPack:PackIconMaterial Close}" Width="25" Margin="0 5 5 5"
+                    Command="{Binding ClearMask}"/>
+        </Grid>
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+            <Button Content="{iconPack:PackIconMaterial AccountPlus}" Margin="5 5 0 5" ToolTip="Добавить" Command="{Binding AddPerson}" />
+            <Button Content="{iconPack:PackIconMaterial AccountEdit}" Margin="5 5 0 5" ToolTip="Изменить" Command="{Binding EditPerson}" />
+            <Button Content="{iconPack:PackIconMaterial AccountRemove}" Margin="5" ToolTip="Удалить" Command="{Binding DeletePerson}" />
+
+            <Button Content="{iconPack:PackIconMaterial Refresh}" Margin="5" ToolTip="Обновить" Command="{Binding RefreshList}" />
+            <Button Content="{iconPack:PackIconMaterial Printer}" Margin="5" ToolTip="Печать списка" Command="{Binding PrintList}" />
+        </StackPanel>
+        <ListBox ItemsSource="{Binding PersonList}" SelectedItem="{Binding SelectedPerson}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel>
+                        <TextBlock Text="{Binding Birthday, StringFormat=dd.MM}" DockPanel.Dock="Left" 
+                                   VerticalAlignment="Center" FontSize="32" Margin="5" />
+                        <TextBlock Text="{Binding Lastname}" DockPanel.Dock="Top" 
+                                   FontSize="24" Margin="5" />
+                        <TextBlock Text="{Binding Firstname}" DockPanel.Dock="Left" />
+                        <TextBlock Text="{Binding Secondname}" />
+                    </DockPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+    </DockPanel>
+</UserControl>

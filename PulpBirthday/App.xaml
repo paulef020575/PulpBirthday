@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:PulpBirthday"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <local:PersonListViewModel x:Key="AppData" />
+        <local:MainViewModel x:Key="AppData" />
     </Application.Resources>
 </Application>

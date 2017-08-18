@@ -13,11 +13,11 @@ namespace PulpBirthday.Classes
 
         public int Id { get; protected set; }
 
-        protected virtual string InsertQuery { get; }
+        protected virtual string InsertQuery { get { throw new NotImplementedException("InsertQuery"); } }
 
-        protected virtual string UpdateQuery { get; }
+        protected virtual string UpdateQuery { get { throw new NotImplementedException("UpdateQuery"); } }
 
-        protected virtual string DeleteQuery { get; }
+        protected virtual string DeleteQuery { get { throw new NotImplementedException("DeleteQuery"); } }
 
         #endregion
 
@@ -55,7 +55,10 @@ namespace PulpBirthday.Classes
 
         protected virtual Dictionary<string, object> CreateParameterList()
         {
-            return new Dictionary<string, object>();
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("id", Id);
+
+            return parameters;
         }
 
         public void Delete(BdDatabase database)
@@ -65,7 +68,22 @@ namespace PulpBirthday.Classes
 
             database.ExecuteQuery(DeleteQuery, parameters);
         }
-        
+
+        public override bool Equals(object obj)
+        {
+            DataItem item = obj as DataItem;
+
+            if (item != null)
+                return Id.Equals(item.Id);
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
+
         #endregion
     }
 }

@@ -117,13 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Delete" xml:space="preserve">
+    <value>delete from refPerson where id = @id</value>
+  </data>
   <data name="Insert" xml:space="preserve">
     <value>select id from refPersonInsert(@lastname, @firstname, @secondname, @female, @birthday, @email, @isInList, @isSending)</value>
   </data>
   <data name="Load" xml:space="preserve">
     <value>select * from refPerson where id = @id</value>
   </data>
-  <data name="LoadList" xml:space="preserve">
-    <value>select * from refPersonLoadList(@dateFrom, @dateTo, @isList) order by birthday, lastname, firstname, secondname</value>
+  <data name="LoadListSortedByBirthday" xml:space="preserve">
+    <value>select * from refPersonLoadList(@dateFrom, @dateTo, @isList, @mask) order by extract(month from birthday), extract(day from birthday)</value>
+  </data>
+  <data name="LoadListSortedByName" xml:space="preserve">
+    <value>select * from refPersonLoadList(@dateFrom, @dateTo, @isList, @mask) order by lastname, firstname, secondname</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>update refPerson set lastname = @lastname, firstname = @firstname, secondname = @secondname, female = @female, birthday = @birthday, email = @email, isInList = @isInList, isSending = @isSending where id = @id</value>
   </data>
 </root>

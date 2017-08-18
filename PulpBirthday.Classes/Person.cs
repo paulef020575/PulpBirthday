@@ -27,6 +27,34 @@ namespace PulpBirthday.Classes
 
         public bool IsSending { get; set; }
 
+        #region Запросы
+
+        protected override string InsertQuery
+        {
+            get
+            {
+                return PulpBirthday.Resources.Queries.Person.Insert;
+            }
+        }
+
+        protected override string UpdateQuery
+        {
+            get
+            {
+                return PulpBirthday.Resources.Queries.Person.Update;
+            }
+        }
+
+        protected override string DeleteQuery
+        {
+            get
+            {
+                return PulpBirthday.Resources.Queries.Person.Delete;
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Конструкторы
@@ -34,6 +62,15 @@ namespace PulpBirthday.Classes
         public Person()
             : base()
         {
+            Lastname = "";
+            Firstname = "";
+            Secondname = "";
+
+            Birthday = DateTime.Today;
+            Female = false;
+            Email = "";
+            IsInList = true;
+            IsSending = true;
         }
 
         public Person(FbDataReader reader)
@@ -54,13 +91,35 @@ namespace PulpBirthday.Classes
 
         #region Методы
 
-        public static List<Person> LoadList(BdDatabase database, DateTime dateFrom, DateTime dateTo, bool forList)
+        protected override Dictionary<string, object> CreateParameterList()
         {
-            string query = PulpBirthday.Resources.Queries.Person.LoadList;
+            Dictionary<string, object> parameters = base.CreateParameterList();
+
+            parameters.Add("lastname", Lastname);
+            parameters.Add("firstname", Firstname);
+            parameters.Add("secondname", Secondname);
+            parameters.Add("female", (Female ? 1 : 0));
+            parameters.Add("birthday", Birthday);
+            parameters.Add("email", Email);
+            parameters.Add("isInList", IsInList);
+            parameters.Add("isSending", IsSending);
+
+            return parameters;
+        }
+
+
+        public static List<Person> LoadList(BdDatabase database, DateTime dateFrom, DateTime dateTo, 
+                                            bool forList, int sortingOrder, string mask)
+        {
+            string query = PulpBirthday.Resources.Queries.Person.LoadListSortedByName;
+            if (sortingOrder == 1)
+                query = PulpBirthday.Resources.Queries.Person.LoadListSortedByBirthday;
+
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("dateFrom", dateFrom);
             parameters.Add("dateTo", dateTo);
             parameters.Add("isList", forList);
+            parameters.Add("mask", mask);
 
             List<Person> personList = new List<Person>();
 
@@ -75,12 +134,12 @@ namespace PulpBirthday.Classes
             return personList;
         }
 
-        public static List<Person> LoadList(BdDatabase database)
+        public static List<Person> LoadList(BdDatabase database, string mask)
         {
             DateTime Jan1 = new DateTime(2017, 1, 1);
             DateTime Dec31 = new DateTime(2017, 12, 31);
 
-            return LoadList(database, Jan1, Dec31, false);
+            return LoadList(database, Jan1, Dec31, false, 0, mask);
         }
 
         public static Person Load(BdDatabase database, int id)

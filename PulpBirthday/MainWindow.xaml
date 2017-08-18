@@ -9,16 +9,17 @@
         Title="{Binding Name}" Height="350" Width="525">
     <Grid>
         <Grid.Resources>
-            <DataTemplate x:Key="PersonList">
-                <ListBox ItemsSource="{Binding PersonList}" />
+            <DataTemplate DataType="{x:Type local:PersonListViewModel}">
+                <local:PersonListView />
             </DataTemplate>
-            <DataTemplate x:Key="Person">
-                <TextBlock Text="{Binding Birthday}" />
+            <DataTemplate DataType="{x:Type local:PersonViewModel}">
+                <local:PersonView />
             </DataTemplate>
-
-            <local:MainDataTemplateSelector x:Key="TemplateSelector" ListTemplate="{StaticResource PersonList}" ItemTemplate="{StaticResource Person}" />
+            <DataTemplate DataType="{x:Type local:PrintListViewModel}">
+                <local:PrintListView />
+            </DataTemplate>
         </Grid.Resources>
 
-        <ContentPresenter ContentTemplateSelector="{StaticResource TemplateSelector}" Content="{Binding CurrentItem}"/>
+        <ContentPresenter Content="{Binding CurrentItem}" />
     </Grid>
 </Window>
