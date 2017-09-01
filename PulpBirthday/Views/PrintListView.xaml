@@ -16,7 +16,15 @@
                            Margin="5" MinWidth="100" TextAlignment="Center"/>
                 <Button Content="{iconPacks:PackIconMaterial MenuRight}" Command="{Binding NextMonth}" Margin="0 5 5 5"/>
             </StackPanel>
-            
+
+            <Button Command="{Binding Template}" Height="Auto" Margin="5" Grid.Column="1" 
+                    Width="{Binding Width, ElementName=BackButton, Mode=OneWay}">
+                <StackPanel Orientation="Vertical">
+                    <ContentControl Content="{iconPacks:PackIconMaterial FileOutline}" Margin="5 5 0 5" HorizontalAlignment="Center"/>
+                    <TextBlock Text="шаблон" Margin="5" />
+                </StackPanel>
+            </Button>
+
             <Button Command="{Binding Print}" Height="Auto" Margin="5" Grid.Column="1" 
                     Width="{Binding Width, ElementName=BackButton, Mode=OneWay}">
                 <StackPanel Orientation="Vertical">

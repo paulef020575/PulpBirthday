@@ -45,6 +45,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -63,10 +64,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="PrintListView.xaml.cs">
+    <Compile Include="Templates\ImageBlockTemplateItem.cs" />
+    <Compile Include="Templates\ITemplateItem.cs" />
+    <Compile Include="Views\PrintListView.xaml.cs">
       <DependentUpon>PrintListView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PrintListViewModel.cs" />
+    <Compile Include="ViewModels\PrintListViewModel.cs" />
+    <Compile Include="Templates\MonthNameTemplateItem.cs" />
+    <Compile Include="Templates\PersonListTemplateItem.cs" />
+    <Compile Include="Templates\PersonNameTemplateItem.cs" />
+    <Compile Include="Templates\Template.cs" />
+    <Compile Include="Templates\TemplateItem.cs" />
+    <Compile Include="Templates\TemplateItemType.cs" />
+    <Compile Include="Templates\TemplateViewModel.cs" />
+    <Compile Include="Templates\TextBlockTemplateItem.cs" />
+    <Compile Include="Views\TemplateView.xaml.cs">
+      <DependentUpon>TemplateView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\PersonView.xaml.cs">
       <DependentUpon>PersonView.xaml</DependentUpon>
     </Compile>
@@ -90,7 +104,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="PrintListView.xaml">
+    <Page Include="Views\PrintListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TemplateView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -127,6 +145,9 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <EmbeddedResource Include="Templates\Default.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -1,0 +1,117 @@
+﻿<UserControl x:Class="PulpBirthday.TemplateView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PulpBirthday"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="600">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="200" MaxWidth="300" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel DockPanel.Dock="Left" Background="#FF0071BC" Orientation="Vertical" Width="Auto">
+            <TextBlock Text="{Binding Name}" Grid.Column="0" Foreground="White" FontSize="16" Margin="5" />
+            <Button Command="{Binding Open}" Margin="5">
+                <StackPanel Orientation="Vertical">
+                    <ContentControl Content="{iconPacks:PackIconMaterial OpenInApp}" Margin="5 5 5 0" HorizontalAlignment="Center"/>
+                    <TextBlock Margin="5 0 5 5" Text="Открыть" />
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding Save}" Margin="5">
+                <StackPanel Orientation="Vertical">
+                    <ContentControl Content="{iconPacks:PackIconMaterial ContentSave}" Margin="5 5 5 0" HorizontalAlignment="Center"/>
+                    <TextBlock Margin="5 0 5 5" Text="Сохранить" />
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding SaveAs}" Margin="5">
+                <StackPanel Orientation="Vertical">
+                    <ContentControl Content="{iconPacks:PackIconMaterial ContentSaveSettings}" Margin="5 5 5 0" HorizontalAlignment="Center"/>
+                    <TextBlock Margin="5 0 5 5" Text="Сохранить как " />
+                </StackPanel>
+            </Button>
+            
+            <Separator />
+
+            <TextBlock Text="Добавить в шаблон" Foreground="White" Margin="5 5 5 0"/>
+            <Button Command="{Binding AddItem}" Margin="5 5 5 0" CommandParameter="{x:Static local:TemplateItemType.MonthName}">
+                <StackPanel Orientation="Horizontal">
+                    <ContentControl Content="{iconPacks:PackIconMaterial Calendar}" Margin="5 5 0 5" />
+                    <TextBlock Text="Название месяца" Margin="5"/>
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding AddItem}" Margin="5 5 5 0" CommandParameter="{x:Static local:TemplateItemType.PersonList}">
+                <StackPanel Orientation="Horizontal">
+                    <ContentControl Content="{iconPacks:PackIconMaterial AccountMultiple}" Margin="5 5 0 5" />
+                    <TextBlock Text="Список" Margin="5"/>
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding AddItem}" CommandParameter="{x:Static local:TemplateItemType.PersonName}" Margin="5 5 5 0">
+                <StackPanel Orientation="Horizontal">
+                    <ContentControl Content="{iconPacks:PackIconMaterial Account}" Margin="5 5 0 5" />
+                    <TextBlock Text="Имя" Margin="5"/>
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding AddItem}" CommandParameter="{x:Static local:TemplateItemType.TextBlock}" Margin="5 5 5 0">
+                <StackPanel Orientation="Horizontal">
+                    <ContentControl Content="{iconPacks:PackIconMaterial FormatText}" Margin="5 5 0 5" />
+                    <TextBlock Text="Текст" Margin="5"/>
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding AddItem}" CommandParameter="{x:Static local:TemplateItemType.ImageBlock}" Margin="5">
+                <StackPanel Orientation="Horizontal">
+                    <ContentControl Content="{iconPacks:PackIconMaterial Image}" Margin="5 5 0 5" />
+                    <TextBlock Text="Изображение" Margin="5"/>
+                </StackPanel>
+            </Button>
+
+        </StackPanel>
+
+        <ListBox ItemsSource="{Binding Items}" Grid.Column="1" HorizontalContentAlignment="Stretch" >
+            <ListBox.Resources>
+                <DataTemplate DataType="{x:Type local:TemplateItem}">
+                    <Grid Background="LightGray" Margin="5">
+                        <Grid.Resources>
+                            <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
+                        </Grid.Resources>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="{Binding}" Grid.Row="0" Margin="5" />
+                        <TextBox Text="{Binding Text}" Grid.Row="1" AcceptsReturn="True"
+                                 Visibility="{Binding IsTextBlock, Converter={StaticResource BoolToVisConverter}}" Margin="5" />
+                        <Image Source="{Binding Image}" Grid.Row="1"
+                               Visibility="{Binding IsImageBlock, Converter={StaticResource BoolToVisConverter}}" Margin="5" />
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" Command="{Binding Path=LoadFile}"  Margin="5"
+                                    Content="{iconPacks:PackIconMaterial OpenInApp}"
+                                    Visibility="{Binding IsImageBlock, Converter={StaticResource BoolToVisConverter}}"/>
+                            <UniformGrid Grid.Column="1" Columns="3" HorizontalAlignment="Right">
+                                <Button Command="{Binding Path=DataContext.MoveUpItem, 
+                                                RelativeSource={RelativeSource AncestorType={x:Type local:TemplateView}}}" 
+                                        CommandParameter="{Binding}" Content="{iconPacks:PackIconMaterial ArrowUp}" 
+                                        Margin="5 5 0 5" />
+                                <Button Command="{Binding Path=DataContext.MoveDownItem,
+                                                RelativeSource={RelativeSource AncestorType={x:Type local:TemplateView}}}" 
+                                        CommandParameter="{Binding}" Content="{iconPacks:PackIconMaterial ArrowDown}" 
+                                        Margin="5 5 0 5" />
+                                <Button Command="{Binding Path=DataContext.RemoveItem, 
+                                                RelativeSource={RelativeSource AncestorType={x:Type local:TemplateView}}}" 
+                                        CommandParameter="{Binding}" Content="{iconPacks:PackIconMaterial Close}" 
+                                        Margin="5"/>
+                            </UniformGrid>
+                        </Grid>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.Resources>
+        </ListBox>
+    </Grid>
+</UserControl>

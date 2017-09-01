@@ -31,7 +31,6 @@ namespace PulpBirthday
         {
             viewModel.EndEditing += ChildEndEditing;
             CurrentItem = viewModel;
-
         }
 
         private void RestoreDefaultViewModel()

@@ -70,5 +70,17 @@ namespace PulpBirthday.Properties {
                 this["Password"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ListTemplate {
+            get {
+                return ((string)(this["ListTemplate"]));
+            }
+            set {
+                this["ListTemplate"] = value;
+            }
+        }
     }
 }

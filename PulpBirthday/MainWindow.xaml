@@ -18,6 +18,9 @@
             <DataTemplate DataType="{x:Type local:PrintListViewModel}">
                 <local:PrintListView />
             </DataTemplate>
+            <DataTemplate DataType="{x:Type local:TemplateViewModel}">
+                <local:TemplateView />
+            </DataTemplate>
         </Grid.Resources>
 
         <ContentPresenter Content="{Binding CurrentItem}" />
