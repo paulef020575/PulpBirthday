@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Xml.Serialization;
+using PulpBirthday.Classes;
 
 namespace PulpBirthday
 {
@@ -59,6 +61,12 @@ namespace PulpBirthday
         private static XmlSerializer GetSerializer()
         {
             return new XmlSerializer(typeof(Template));
+        }
+
+        internal void FillDocument(object fillObject)
+        {
+            foreach (TemplateItem item in Items)
+                item.AddToDocument(fillObject);
         }
 
         #endregion

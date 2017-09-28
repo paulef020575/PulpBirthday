@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Xml.Serialization;
 
 namespace PulpBirthday
@@ -63,6 +64,11 @@ namespace PulpBirthday
                 default:
                     return "<НеизвестныйВидБлока>";
             }
+        }
+
+        public virtual void AddToDocument(object fillObject)
+        {
+            throw new NotImplementedException("AddToDocument method");
         }
 
         public override bool Equals(object obj)

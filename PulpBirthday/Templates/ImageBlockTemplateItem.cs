@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
 using static System.Net.Mime.MediaTypeNames;
+using System.Windows.Documents;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace PulpBirthday
 {
@@ -71,6 +74,9 @@ namespace PulpBirthday
         {
             Image = new BitmapImage(new Uri(fileName));
             NotifyPropertyChanged("Image");
+
+            if (onDocumentChanged != null)
+                onDocumentChanged(this, EventArgs.Empty);
         }
 
         private void OpenImage()
@@ -91,6 +97,48 @@ namespace PulpBirthday
 
             return openFileDialog;
         }
+
+        public override void AddToDocument(object fillObject)
+        {
+            PrintListViewModel printList = fillObject as PrintListViewModel;
+
+            if (printList != null)
+            {
+                if (onDocumentChanged == null)
+                    onDocumentChanged += printList.OnImageChanged;
+                AddImageToDocument(printList.Document);
+                return;
+            }
+
+            throw new ArgumentException("Неподдерживаемый вид шаблона");
+        }
+
+        private void AddImageToDocument(FlowDocument document)
+        {
+            document.Blocks.Add(CreateParagrath());            
+        }
+
+        public Paragraph CreateParagrath()
+        {
+            Paragraph paragrath = new Paragraph();
+            System.Windows.Controls.Image imageCopy = new System.Windows.Controls.Image();
+            imageCopy.Source = Image;
+            paragrath.Inlines.Add(imageCopy);
+
+            ContextMenu menu = new ContextMenu();
+            MenuItem menuItem = new MenuItem();
+            menuItem.Header = "Изменить изображение";
+            menuItem.Command = LoadFile;
+
+            menu.Items.Add(menuItem);
+            imageCopy.ContextMenu = menu;
+
+            paragrath.Tag = this;
+
+            return paragrath;
+        }
+
+        private EventHandler onDocumentChanged;
 
         #endregion
 

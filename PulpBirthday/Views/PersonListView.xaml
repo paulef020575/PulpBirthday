@@ -44,8 +44,8 @@
                                    VerticalAlignment="Center" FontSize="32" Margin="5" />
                         <TextBlock Text="{Binding Lastname}" DockPanel.Dock="Top" 
                                    FontSize="24" Margin="5" />
-                        <TextBlock Text="{Binding Firstname}" DockPanel.Dock="Left" />
-                        <TextBlock Text="{Binding Secondname}" />
+                        <TextBlock Text="{Binding Firstname}" DockPanel.Dock="Left" Margin="5" />
+                        <TextBlock Text="{Binding Secondname}" Margin="0 5 5 5" />
                     </DockPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

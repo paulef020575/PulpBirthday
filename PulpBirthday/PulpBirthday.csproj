@@ -65,7 +65,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Templates\ImageBlockTemplateItem.cs" />
-    <Compile Include="Templates\ITemplateItem.cs" />
     <Compile Include="Views\PrintListView.xaml.cs">
       <DependentUpon>PrintListView.xaml</DependentUpon>
     </Compile>

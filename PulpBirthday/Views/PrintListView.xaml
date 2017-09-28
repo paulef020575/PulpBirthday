@@ -7,6 +7,21 @@
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="379.083">
+    <UserControl.Resources>
+        <x:Array Type="{x:Type SolidColorBrush}" x:Key="fontColors">
+            <SolidColorBrush>Black</SolidColorBrush>
+            <SolidColorBrush>Blue</SolidColorBrush>
+            <SolidColorBrush>Green</SolidColorBrush>
+            <SolidColorBrush>Red</SolidColorBrush>
+        </x:Array>
+
+        <x:Array Type="{x:Type FontFamily}" x:Key="fontFamilies">
+            <FontFamily>Arial</FontFamily>
+            <FontFamily>Times New Roman</FontFamily>
+            <FontFamily>Calibry</FontFamily>
+            <FontFamily>Georgia</FontFamily>
+        </x:Array>
+    </UserControl.Resources>
     <DockPanel>
 
         <StackPanel DockPanel.Dock="Left" Orientation="Vertical" HorizontalAlignment="Center">
@@ -17,14 +32,6 @@
                 <Button Content="{iconPacks:PackIconMaterial MenuRight}" Command="{Binding NextMonth}" Margin="0 5 5 5"/>
             </StackPanel>
 
-            <Button Command="{Binding Template}" Height="Auto" Margin="5" Grid.Column="1" 
-                    Width="{Binding Width, ElementName=BackButton, Mode=OneWay}">
-                <StackPanel Orientation="Vertical">
-                    <ContentControl Content="{iconPacks:PackIconMaterial FileOutline}" Margin="5 5 0 5" HorizontalAlignment="Center"/>
-                    <TextBlock Text="шаблон" Margin="5" />
-                </StackPanel>
-            </Button>
-
             <Button Command="{Binding Print}" Height="Auto" Margin="5" Grid.Column="1" 
                     Width="{Binding Width, ElementName=BackButton, Mode=OneWay}">
                 <StackPanel Orientation="Vertical">
@@ -32,6 +39,49 @@
                     <TextBlock Text="печать" Margin="5" />
                 </StackPanel>
             </Button>
+
+            <Button Command="{Binding EditTemplate}" Height="Auto" Margin="5" Grid.Column="1" 
+                    Width="{Binding Width, ElementName=BackButton, Mode=OneWay}">
+                <StackPanel Orientation="Vertical">
+                    <ContentControl Content="{iconPacks:PackIconMaterial FileOutline}" Margin="5 5 0 5" HorizontalAlignment="Center"/>
+                    <TextBlock Text="шаблон" Margin="5" />
+                </StackPanel>
+            </Button>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Шрифт" Margin="5" />
+                <ComboBox SelectedValue="{Binding FontFamily, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" Margin="5"
+                          ItemsSource="{StaticResource fontFamilies}" Width="Auto">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock FontFamily="{Binding}" Text="{Binding}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Размер" Margin="5" />
+                <TextBox Text="{Binding FontSize, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="5"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Цвет" Margin="5" />
+                <ComboBox SelectedValue="{Binding FontColor, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" Margin="5"
+                          ItemsSource="{StaticResource fontColors}" Width="Auto">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                                <Rectangle Fill="{Binding}" Width="75" Height="16" Margin="3"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </Grid>
 
             <Button Command="{Binding Close}" Height="Auto" Margin="5" Grid.Column="0" Name="BackButton" Width="Auto">
                 <StackPanel Orientation="Vertical">
@@ -41,7 +91,7 @@
             </Button>
         </StackPanel>
 
-        <FlowDocumentPageViewer Document="{Binding Document}">
-        </FlowDocumentPageViewer>
+        <FlowDocumentPageViewer Document="{Binding Document}" />
+
     </DockPanel>
 </UserControl>

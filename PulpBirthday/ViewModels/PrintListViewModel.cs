@@ -6,7 +6,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace PulpBirthday
 {
@@ -16,6 +20,7 @@ namespace PulpBirthday
 
         private BdDatabase database;
 
+        public List<Person> PersonList { get; private set; }
 
         private DateTime dateFrom;
         public DateTime DateFrom
@@ -33,6 +38,36 @@ namespace PulpBirthday
         }
 
         public FlowDocument Document { get; private set; }
+
+        public double FontSize
+        {
+            get { return Document.FontSize; }
+            set
+            {
+                Document.FontSize = value;
+                NotifyPropertyChanged("FontSize");
+            }
+        }
+
+        public SolidColorBrush FontColor
+        {
+            get { return (SolidColorBrush)Document.Foreground; }
+            set
+            {
+                Document.Foreground = value;
+                NotifyPropertyChanged("FontColor");
+            }
+        }
+
+        public FontFamily FontFamily
+        {
+            get { return Document.FontFamily; }
+            set
+            {
+                Document.FontFamily = value;
+                NotifyPropertyChanged("FontFamily");
+            }
+        }
 
         #endregion
 
@@ -61,25 +96,12 @@ namespace PulpBirthday
 
         private void RefreshDocument()
         {
-            List<Person> personList = Person.LoadList(database, DateFrom, DateFrom.AddMonths(1).AddDays(-1), true, 1, "");
+            PersonList = Person.LoadList(database, DateFrom, DateFrom.AddMonths(1).AddDays(-1), true, 1, "");
 
             Document.Blocks.Clear();
 
-            Paragraph paragrath = new Paragraph();
-            paragrath.Inlines.Add(DateFrom.ToString("MMMM"));
-
-            Document.Blocks.Add(paragrath);
-
-            foreach (Person person in personList)
-            {
-                paragrath = new Paragraph();
-                paragrath.Inlines.Add(person.Birthday.ToString("dd"));
-                paragrath.Inlines.Add(person.Lastname);
-                paragrath.Inlines.Add(person.Firstname);
-                Document.Blocks.Add(paragrath);
-            }
-
-            NotifyPropertyChanged("Document");
+            Template template = Template.Open(Settings.Default.ListTemplate);
+            template.FillDocument(this);
         }
 
         private void ReturnToMainList()
@@ -90,6 +112,25 @@ namespace PulpBirthday
         private void ChangeMonth(short value)
         {
             DateFrom = DateFrom.AddMonths(value);
+        }
+
+        private void ShowTemplateView()
+        {
+            if (SetActiveViewModel != null)
+                SetActiveViewModel(new TemplateViewModel(true));
+        }
+
+        private void PrintDocument()
+        {
+            PrintDialog dialog = new PrintDialog();
+            if (dialog.ShowDialog() == true)
+            {
+                Document.PageHeight = dialog.PrintableAreaHeight;
+                Document.PageWidth = dialog.PrintableAreaWidth;
+                Document.PagePadding = new Thickness(40);
+
+                dialog.PrintDocument(((IDocumentPaginatorSource)Document).DocumentPaginator, "Печать");
+            }
         }
 
         #endregion
@@ -145,6 +186,61 @@ namespace PulpBirthday
 
         #endregion
 
+        #region EditTemplate
+
+        private RelayCommand editTemplateCommand;
+
+        public RelayCommand EditTemplate
+        {
+            get
+            {
+                if (editTemplateCommand == null)
+                    editTemplateCommand = new RelayCommand(param => ShowTemplateView());
+
+                return editTemplateCommand;
+            }
+        }
+
         #endregion
+
+        #region Print
+
+        private RelayCommand printCommand;
+
+        public RelayCommand Print
+        {
+            get
+            {
+                if (printCommand == null)
+                    printCommand = new RelayCommand(param => PrintDocument());
+
+                return printCommand;
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+        public void OnImageChanged(object sender, EventArgs e)
+        {
+            ImageBlockTemplateItem item = sender as ImageBlockTemplateItem;
+
+            if (item != null)
+            {
+                List<Block> blockList = Document.Blocks.ToList<Block>();
+                Document.Blocks.Clear();
+
+                foreach (Block block in blockList)
+                {
+                    if (block.Tag == item)
+                        Document.Blocks.Add(item.CreateParagrath());
+                    else
+                        Document.Blocks.Add(block);
+                }
+
+                NotifyPropertyChanged("Document");
+            }
+        }
     }
 }
